@@ -1,0 +1,42 @@
+
+import heapq
+
+def uniform_cost_search(graph, source, destination):
+    priority_queue = [(0, source, [source])]
+    visited = set()
+
+    while priority_queue:
+        cost, current, path = heapq.heappop(priority_queue)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        if current == destination:
+            print("Least-cost path:", " -> ".join(path))
+            print("Minimum transportation cost:", cost)
+            return
+
+        for neighbor, weight in graph[current]:
+            if neighbor not in visited:
+                heapq.heappush(
+                    priority_queue,
+                    (cost + weight, neighbor, path + [neighbor])
+                )
+
+    print("No path found")
+
+# Logistics network with transportation costs
+graph = {
+    'A': [('B', 4), ('C', 2)],
+    'B': [('D', 5), ('E', 10)],
+    'C': [('B', 1), ('D', 8)],
+    'D': [('E', 2)],
+    'E': []
+}
+
+source = 'A'
+destination = 'E'
+
+uniform_cost_search(graph, source, destination)
